@@ -1,4 +1,6 @@
+import random
 import threading
+import tg_bot.modules.helper_funcs.fun_strings as fun
 
 from sqlalchemy import Column, String, Boolean, UnicodeText, Integer, BigInteger
 
