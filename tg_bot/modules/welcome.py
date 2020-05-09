@@ -1,4 +1,5 @@
 import html
+import random
 from typing import Optional, List
 
 from telegram import Message, Chat, Update, Bot, User
@@ -149,6 +150,8 @@ def new_member(bot: Bot, update: Update):
                 first_name = new_mem.first_name or "PersonWithNoName"  # edge case of empty name - occurs for some bugs.
 
                 if cust_welcome:
+                      if cust_welcome == sql.DEFAULT_WELCOME:
+                        cust_welcome = random.choice(sql.RANDOM_WEL).format(first=first_name)
                     if new_mem.last_name:
                         fullname = "{} {}".format(first_name, new_mem.last_name)
                     else:
@@ -168,13 +171,13 @@ def new_member(bot: Bot, update: Update):
                     buttons = sql.get_welc_buttons(chat.id)
                     keyb = build_keyboard(buttons)
                 else:
-                    res = sql.DEFAULT_WELCOME.format(first=first_name)
+                    res = random.choice(sql.RANDOM_WEL).format(first=first_name)
                     keyb = []
 
                 keyboard = InlineKeyboardMarkup(keyb)
 
                 sent = send(update, res, keyboard,
-                            sql.DEFAULT_WELCOME.format(first=first_name))  # type: Optional[Message]
+                       random.choice(sql.RANDOM_WEL).format(first=first_name))  # type: Optional[Message]
             delete_join(bot, update)
 
         prev_welc = sql.get_clean_pref(chat.id)
@@ -211,6 +214,8 @@ def left_member(bot: Bot, update: Update):
 
             first_name = left_mem.first_name or "PersonWithNoName"  # edge case of empty name - occurs for some bugs.
             if cust_goodbye:
+                 if cust_goodbye == sql.DEFAULT_GOODBYE:
+                    cust_goodbye = random.choice(sql.RANDOM_BYE)
                 if left_mem.last_name:
                     fullname = "{} {}".format(first_name, left_mem.last_name)
                 else:
@@ -231,12 +236,12 @@ def left_member(bot: Bot, update: Update):
                 keyb = build_keyboard(buttons)
 
             else:
-                res = sql.DEFAULT_GOODBYE
+               res = random.choice(sql.RANDOM_BYE)
                 keyb = []
 
             keyboard = InlineKeyboardMarkup(keyb)
 
-            send(update, res, keyboard, sql.DEFAULT_GOODBYE)
+            send(update, res, keyboard, random.choice(sql.RANDOM_BYE))
             delete_join(bot, update)
 
 
